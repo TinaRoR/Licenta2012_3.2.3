@@ -1,5 +1,6 @@
 
 class SessionsController < ApplicationController
+  before_filter :already_signed_in, only: [:new, :create]
   
   def new
     end
@@ -9,7 +10,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       #Sign the user in and redirect to the user's show page.
       sign_in user
-      redirect_to user
+      redirect_back_or user
     else
       #Create an error message and re-render the signin form.
       flash.now[:error] = 'Invalid email/password combination'
@@ -23,5 +24,11 @@ class SessionsController < ApplicationController
     sign_out
     redirect_to root_path
   end
+  
+  private
+  
+    def already_signed_in
+      redirect_to root_path unless !signed_in?
+    end
   
 end
