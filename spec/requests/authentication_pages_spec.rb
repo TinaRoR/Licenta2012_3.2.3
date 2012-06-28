@@ -80,6 +80,7 @@ describe "Authentication" do
           
           describe "when signing in again" do
             before do
+              click_link signout_path
               visit signin_path
               fill_in "Email",    with: user.email
               fill_in "Password", with: user.password
@@ -142,6 +143,19 @@ describe "Authentication" do
           it "should render the desired protected page" do
             page.should have_selector('title', text: 'Edit user')
           end
+        end
+      end
+      
+      describe "in the Posts controller" do
+        
+        describe "submitting to create action" do
+          before { post posts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+        
+        describe "submitting to the destroy action" do 
+          before { delete post_path(FactoryGirl.create(:post)) }
+          specify { response.should redirect_to(signin_path) }
         end
       end
       

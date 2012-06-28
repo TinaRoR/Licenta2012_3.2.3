@@ -9,4 +9,9 @@ FactoryGirl.define do
       admin true
     end
   end
+  
+  factory :post do
+    content "Lore ipsum"
+    user
+  end
 end
